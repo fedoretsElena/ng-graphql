@@ -1,0 +1,20 @@
+<section class="m-4">
+    <div class="card text-dark w-50"
+      *ngIf="project$ | async as project"
+    >
+        <div class="card-body">
+            <h5 class="card-title">{{ project.name }} for {{ project.company }}</h5>
+            <p class="card-text">{{ project.description }}</p>
+        </div>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let member of project.members">
+                {{ member.fullName }} - {{ member.role }}
+            </li>
+        </ul>
+        <div class="card-footer d-flex justify-content-between">
+            <span>Start date:</span>
+           {{ project.startDate }}
+        </div>
+    </div>
+</section>

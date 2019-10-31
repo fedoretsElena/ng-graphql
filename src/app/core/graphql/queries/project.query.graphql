@@ -1,0 +1,16 @@
+query project($id: ID!) {
+  project(id: $id) {
+    name,
+    startDate,
+    company,
+    members {
+      fullName,
+      role
+    },
+    description,
+    technologies {
+      name,
+      version
+    }
+  }
+}

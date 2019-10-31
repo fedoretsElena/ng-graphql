@@ -1,0 +1,9 @@
+.dark {
+    color: white;
+    background: grey;
+}
+
+main {
+    min-height: 100vh;
+    transition: .4s background, .3s color;
+}

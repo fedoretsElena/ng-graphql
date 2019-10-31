@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
+import { GET_THEME } from './core/graphql';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +11,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ng-apollo';
+  theme: Observable<'light' | 'dark'>;
+
+  constructor(private apollo: Apollo) {
+    this.theme = this.apollo
+      .watchQuery({
+        query: GET_THEME
+      })
+      .valueChanges
+      .pipe(
+        tap(res => console.log('Res', res)),
+        map((res: any) => res.data ? res.data.theme : 'light')
+      );
+  }
 }

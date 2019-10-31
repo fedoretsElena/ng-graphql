@@ -1,0 +1,43 @@
+<div class="p-3">
+  <div *ngIf="loading">Posts loading...</div>
+
+  <ng-container *ngIf="projects$ | async as projects">
+    <div class="d-flex">
+      <div
+        class="card text-dark m-2"
+        style="width: 18rem;"
+        *ngFor="let project of projects"
+      >
+        <div class="card-body">
+          <h5 class="card-title">{{ project.name }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Start date: {{ project.startDate }}</h6>
+          <p *ngIf="project.technologies.length"> Technologies:
+            <span
+              class="pl-0"
+              *ngFor="let technology of project.technologies, let last = last">
+                {{ technology.name }}<ng-container *ngIf="!last">, </ng-container>
+             </span>
+          </p>
+        </div>
+
+        <div class="card-footer">
+          <a [routerLink]="[project.id]" class="card-link">See more</a>
+          <button class="btn btn-primary btn-sm px-2 my-0 float-right" (click)="onDelete(project.id)">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <button
+      class="btn btn-primary btn-sm mt-2"
+      *ngIf="projects && projects.length"
+      (click)="onDeleteAll()">Delete all
+    </button>
+  </ng-container>
+
+  <section class="mt-5 py-2 border-1 border-primary">
+    <app-project-form
+      class="d-block w-50"
+      (addProject)="onAddProject($event)"
+    ></app-project-form>
+  </section>
+</div>
