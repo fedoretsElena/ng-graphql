@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { GET_THEME } from './core/graphql';
@@ -20,7 +20,6 @@ export class AppComponent {
       })
       .valueChanges
       .pipe(
-        tap(res => console.log('Res', res)),
         map((res: any) => res.data ? res.data.theme : 'light')
       );
   }

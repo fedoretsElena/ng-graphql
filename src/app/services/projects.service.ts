@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { QueryRef } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
 import { FetchResult } from 'apollo-link';
+import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 
 import { IProject } from '../models';
-import { CreateProjectGQL, DeleteProjectGQL, DeleteAllProjectsGQL, ProjectsGQL } from '../core/graphql';
+import { CreateProjectGQL, DeleteProjectGQL, DeleteAllProjectsGQL, ProjectsGQL, GET_FILTERS } from '../core/graphql';
+import { IFilters } from '../models/filters.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,7 @@ import { CreateProjectGQL, DeleteProjectGQL, DeleteAllProjectsGQL, ProjectsGQL }
 export class ProjectsService {
 
   constructor(
+    private apollo: Apollo,
     private getProjectsGQL: ProjectsGQL,
     private createProjectGQL: CreateProjectGQL,
     private deleteProjectGQL: DeleteProjectGQL,
@@ -20,17 +23,24 @@ export class ProjectsService {
   ) {
   }
 
-  getProjects(): QueryRef<{ projects: IProject[] }> {
-    return this.getProjectsGQL.watch() as any;
+  getFilters(): QueryRef<ApolloQueryResult<{ filters: IFilters }>> {
+    return this.apollo.watchQuery({
+      query: GET_FILTERS
+    });
+  }
+
+  watchProjects(filters?: IFilters): QueryRef<{ projects: IProject[] }> {
+    return this.getProjectsGQL.watch(filters) as any;
   }
 
   deleteProject(id: string): Observable<FetchResult> {
     return this.deleteProjectGQL.mutate({ id }, {
       update: (store, { data: { deleteProject } }: any) => {
-        const data: any = store.readQuery({ query: this.getProjectsGQL.document });
+        const query = { query: this.getProjectsGQL.document, variables: this.lastFiltersState };
+        const data: any = store.readQuery(query);
         data.projects = data.projects.filter(project => project.id !== deleteProject);
 
-        store.writeQuery({ query: this.getProjectsGQL.document, data });
+        store.writeQuery({ ...query, data });
       }
     });
   }
@@ -38,10 +48,15 @@ export class ProjectsService {
   deleteAllProjects() {
     return this.deleteAllProjectsGQL.mutate({}, {
       update: (store) => {
-        const data: any = store.readQuery({ query: this.getProjectsGQL.document });
+        const query = {
+          query: this.getProjectsGQL.document,
+          variables: this.lastFiltersState
+        };
+        const data: any = store.readQuery(query);
+
         data.projects = [];
 
-        store.writeQuery({ query: this.getProjectsGQL.document, data });
+        store.writeQuery({ ...query, data });
       }
     });
   }
@@ -51,8 +66,13 @@ export class ProjectsService {
 
     return this.createProjectGQL.mutate({ name, startDate }, {
       refetchQueries: [{ // because ID is generated on backend
-        query: this.getProjectsGQL.document
+        query: this.getProjectsGQL.document,
+        variables: this.lastFiltersState
       }]
     });
+  }
+
+  private get lastFiltersState(): IFilters {
+    return (this.getFilters().currentResult().data as any).filters;
   }
 }

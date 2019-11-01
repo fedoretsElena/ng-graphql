@@ -7,7 +7,7 @@ const { projects } = require('./data-set');
 
 exports.typeDefs = [gql`
   extend type Query {
-    projects: [Project]
+    projects(search: String, limit: Int): [Project]
   }
   
   type Project { 
@@ -51,7 +51,21 @@ const deleteAllProjects = () => {
 
 exports.projectsResolvers = {
   Query: {
-    projects: () => projects
+    projects: (root, filters) => {
+      console.log('Filters', filters);
+
+      if (!Object.keys(filters).length) {
+        return projects;
+      }
+
+      const { search, limit } = filters;
+
+      if (limit) {
+        return projects.slice(0, limit);
+      }
+
+      return projects;
+    }
   },
   Mutation: {
     createProject,

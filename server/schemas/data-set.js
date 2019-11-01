@@ -37,6 +37,56 @@ const projects = [{
     version: '8.0.0'
   }],
   company: 'Bridgewater'
+}, {
+  id: '3',
+  name: 'EQFX',
+  startDate: '08.12.2022',
+  company: 'Equifax',
+  description: '\n' +
+    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
+    'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
+  technologies: []
+}, {
+  id: '4',
+  name: 'DFHX',
+  startDate: '02.12.2020',
+  company: 'Equifax',
+  description: '\n' +
+    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
+    'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
+  technologies: []
+}, {
+  id: '5',
+  name: 'EQSZ',
+  startDate: '02.02.2020',
+  company: 'Equifax',
+  description: '\n' +
+    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
+    'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
+  technologies: []
+}, {
+  id: '6',
+  name: 'FSBA',
+  startDate: '12.03.2020',
+  company: 'Equifax',
+  description: '\n' +
+    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
+    'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
+  technologies: []
+}, {
+  id: '6',
+  name: 'TEST',
+  startDate: '01.03.2020',
+  company: 'Epam',
+  description: '\n' +
+    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
+    'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
+  technologies: []
 }];
 
 exports.projects = projects;
