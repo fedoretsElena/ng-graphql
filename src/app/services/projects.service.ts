@@ -35,7 +35,7 @@ export class ProjectsService {
 
   deleteProject(id: string): Observable<FetchResult> {
     return this.deleteProjectGQL.mutate({ id }, {
-      update: (store, { data: { deleteProject } }: any) => {
+      update: (store, { data: { deleteProject } }) => {
         const query = { query: this.getProjectsGQL.document, variables: this.lastFiltersState };
         const data: any = store.readQuery(query);
         data.projects = data.projects.filter(project => project.id !== deleteProject);

@@ -1,16 +1,11 @@
 query project($id: ID!) {
   project(id: $id) {
-    name,
-    startDate,
-    company,
+    ...projectBaseFields
+    company
     members {
-      fullName,
+      fullName
       role
     },
-    description,
-    technologies {
-      name,
-      version
-    }
+    description
   }
 }

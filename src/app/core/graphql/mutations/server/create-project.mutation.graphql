@@ -1,0 +1,6 @@
+mutation createProject($name: String!, $startDate: String!) {
+  createProject(name: $name, startDate: $startDate) {
+    name,
+    startDate
+  }
+}

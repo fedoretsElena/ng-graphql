@@ -3,18 +3,14 @@ const { gql } = require('apollo-server-express');
 const { projects } = require('./data-set');
 
 module.exports.typeDefs = gql`  
-  type ProjectDetails {
-    id: ID
-    name: String
-    description: String
-    startDate: String
-    technologies: [Technology]
-    company: String
+  extend type Project {
     members: [User]
+    company: String
+    description: String
   }
 
   extend type Query {
-    project(id: ID!): ProjectDetails
+    project(id: ID!): Project
   }
 `;
 

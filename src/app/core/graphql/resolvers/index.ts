@@ -4,7 +4,7 @@ export const resolvers = {
       // const res = cache.readQuery({ query: GET_FILTERS });
       console.log('New', filters);
 
-      filters['__typename'] = 'Filters';
+      filters.__typename = 'Filters';
 
       cache.writeData({ data: { filters } });
     }
