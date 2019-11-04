@@ -4,9 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 
-import { IProjectDetails } from '../../models';
-import { ProjectsService } from '../../services';
-import { ProjectGQL } from '../../core/graphql/queries';
+import { ProjectDetails, ProjectGQL } from '../../core/graphql';
 
 @Component({
   selector: 'app-project-details',
@@ -14,7 +12,7 @@ import { ProjectGQL } from '../../core/graphql/queries';
   styleUrls: ['./project-details.component.css']
 })
 export class ProjectDetailsComponent implements OnInit {
-  project$: Observable<IProjectDetails>;
+  project$: Observable<ProjectDetails>;
 
   constructor(
     private route: ActivatedRoute,

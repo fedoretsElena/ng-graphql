@@ -53,7 +53,7 @@ exports.projectsResolvers = {
   Query: {
     projects: (root, filters) => {
       console.log('Filters', filters);
-
+      let filteredProjects = [...projects];
       if (!Object.keys(filters).length) {
         return projects;
       }
@@ -61,10 +61,16 @@ exports.projectsResolvers = {
       const { search, limit } = filters;
 
       if (limit) {
-        return projects.slice(0, limit);
+        filteredProjects = projects.slice(0, limit);
       }
 
-      return projects;
+      if (search && search.length) {
+        filteredProjects = filteredProjects.filter(project => project.name
+          .toLowerCase()
+          .includes(search.toLowerCase()));
+      }
+
+      return filteredProjects;
     }
   },
   Mutation: {

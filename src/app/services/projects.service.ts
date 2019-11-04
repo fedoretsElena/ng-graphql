@@ -6,7 +6,7 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 
 import { IProject } from '../models';
-import { CreateProjectGQL, DeleteProjectGQL, DeleteAllProjectsGQL, ProjectsGQL, GET_FILTERS } from '../core/graphql';
+import { CreateProjectGQL, DeleteProjectGQL, DeleteAllProjectsGQL, ProjectsGQL, GET_FILTERS, Project } from '../core/graphql';
 import { IFilters } from '../models/filters.model';
 
 @Injectable({
@@ -29,8 +29,8 @@ export class ProjectsService {
     });
   }
 
-  watchProjects(filters?: IFilters): QueryRef<{ projects: IProject[] }> {
-    return this.getProjectsGQL.watch(filters) as any;
+  watchProjects(filters?: IFilters): QueryRef<{ projects: Project[] }> {
+    return this.getProjectsGQL.watch(filters);
   }
 
   deleteProject(id: string): Observable<FetchResult> {

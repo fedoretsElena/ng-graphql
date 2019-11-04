@@ -1,5 +1,5 @@
-query {
-  projects {
+query projects($search: String, $limit: Int) {
+  projects(search: $search, limit: $limit) {
     id,
     name,
     startDate,

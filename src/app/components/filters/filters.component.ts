@@ -13,7 +13,7 @@ import { SAVE_FILTERS } from '../../core/graphql';
 export class FiltersComponent implements OnInit {
   filtersForm: FormGroup = this.fb.group({
     search: '',
-    limit: 6
+    limit: 15
   });
 
   constructor(
@@ -32,7 +32,6 @@ export class FiltersComponent implements OnInit {
 
       this.filtersForm.valueChanges
       .pipe(
-        // tap(res => console.log('Filter form changes: ', res)),
         debounceTime(1200),
         switchMap(({ search, limit }) => this.apollo.mutate({
             mutation: SAVE_FILTERS,

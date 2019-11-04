@@ -12,6 +12,7 @@ export interface ITechnology {
   version: string;
 }
 
+// not used now, using auto generated type
 export interface IProjectDetails extends IProject {
   description: string;
   members: IUser[];

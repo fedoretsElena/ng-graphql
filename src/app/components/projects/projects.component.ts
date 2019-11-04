@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { combineLatest, merge, Observable } from 'rxjs';
-import { filter, first, map, mapTo, pluck, switchMap, tap } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { filter, first, map, pluck, tap } from 'rxjs/operators';
 
 import { IProject } from '../../models';
 import { ProjectsService } from '../../services';
-import { IFilters } from '../../models/filters.model';
+import { Project } from '../../core/graphql';
 
 @Component({
   selector: 'app-posts',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css']
 })
-export class ProjectsComponent implements OnInit {
-  projects$: Observable<IProject[]>;
-
+export class ProjectsComponent implements OnInit, OnDestroy {
+  projects$: Observable<Project[]>;
   loading = true;
+
+  private sub;
 
   constructor(
     private projectsService: ProjectsService
@@ -22,7 +23,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   ngOnInit() {
-    const filters$ = this.projectsService.getFilters().valueChanges
+    this.sub = this.projectsService.getFilters().valueChanges
     .pipe(
       filter(res => !!res.data),
       pluck('data'),
@@ -34,20 +35,13 @@ export class ProjectsComponent implements OnInit {
 
     this.projects$ = watchProjects$.valueChanges
     .pipe(
-      tap(() => console.log('CHANGES')),
       tap(({ loading }) => this.loading = loading),
       map(res => res.data.projects)
     );
+  }
 
-    // this.projects$ = merge(filters$, watchProjects$)
-    //   .pipe(
-    //     switchMap((filters) => this.projectsService.getProjects(filters as IFilters)
-    //       .pipe(
-    //         tap(({loading}) => this.loading = loading),
-    //         map(res => res.data.projects)
-    //       )
-    //     )
-    //   );
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   onAddProject(project: Partial<IProject>): void {

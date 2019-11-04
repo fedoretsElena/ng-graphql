@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:server": "node server/schema.js",
+    "server": "node server/schema.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -31,6 +31,8 @@
     "apollo-server": "^2.9.7",
     "bootstrap": "^4.3.1",
     "graphql": "^14.5.8",
+    "graphql-codegen-typescript-client": "^0.18.2",
+    "graphql-codegen-typescript-common": "^0.18.2",
     "graphql-tag": "^2.10.0",
     "lodash": "^4.17.15",
     "rxjs": "~6.4.0",
