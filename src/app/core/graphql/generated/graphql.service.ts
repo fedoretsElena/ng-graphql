@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import { Injectable } from '@angular/core';
 import * as Apollo from 'apollo-angular';
-
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -13,6 +12,8 @@ export type Scalars = {
   /** The `Upload` scalar type represents a file upload. */
   Upload: any,
 };
+
+
 
 
 export enum CacheControlScope {
@@ -95,12 +96,10 @@ export type ProjectQueryVariables = {
 };
 
 
-export type ProjectQuery = {
-  project: Maybe<(
+export type ProjectQuery = { project: Maybe<(
     Pick<ProjectDetails, 'name' | 'startDate' | 'company' | 'description'>
     & { members: Maybe<Array<Maybe<Pick<User, 'fullName' | 'role'>>>>, technologies: Maybe<Array<Maybe<Pick<Technology, 'name' | 'version'>>>> }
-    )>
-};
+  )> };
 
 export type ProjectsQueryVariables = {
   search?: Maybe<Scalars['String']>,
@@ -108,57 +107,56 @@ export type ProjectsQueryVariables = {
 };
 
 
-export type ProjectsQuery = {
-  projects: Maybe<Array<Maybe<(
+export type ProjectsQuery = { projects: Maybe<Array<Maybe<(
     Pick<Project, 'id' | 'name' | 'startDate'>
     & { technologies: Maybe<Array<Maybe<Pick<Technology, 'name' | 'version'>>>> }
-    )>>>
-};
+  )>>> };
 
 
 export const ProjectDocument = gql`
-  query project($id: ID!) {
-    project(id: $id) {
+    query project($id: ID!) {
+  project(id: $id) {
+    name
+    startDate
+    company
+    members {
+      fullName
+      role
+    }
+    description
+    technologies {
       name
-      startDate
-      company
-      members {
-        fullName
-        role
-      }
-      description
-      technologies {
-        name
-        version
-      }
+      version
     }
   }
-`;
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ProjectGQL extends Apollo.Query<ProjectQuery, ProjectQueryVariables> {
-  document = ProjectDocument;
 }
+    `;
 
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ProjectGQL extends Apollo.Query<ProjectQuery, ProjectQueryVariables> {
+    document = ProjectDocument;
+    
+  }
 export const ProjectsDocument = gql`
-  query projects($search: String, $limit: Int) {
-    projects(search: $search, limit: $limit) {
-      id
+    query projects($search: String, $limit: Int) {
+  projects(search: $search, limit: $limit) {
+    id
+    name
+    startDate
+    technologies {
       name
-      startDate
-      technologies {
-        name
-        version
-      }
+      version
     }
   }
-`;
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ProjectsGQL extends Apollo.Query<ProjectsQuery, ProjectsQueryVariables> {
-  document = ProjectsDocument;
 }
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ProjectsGQL extends Apollo.Query<ProjectsQuery, ProjectsQueryVariables> {
+    document = ProjectsDocument;
+    
+  }
