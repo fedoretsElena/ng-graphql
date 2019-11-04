@@ -1,9 +1,9 @@
-const typeDef = `
+const { gql } = require('apollo-server-express');
+
+module.exports.typeDef = gql`
   type User {
-    id: ID,
+    id: ID
     fullName: String
     role: RoleEnum
   }
 `;
-
-exports.typeDef = typeDef;

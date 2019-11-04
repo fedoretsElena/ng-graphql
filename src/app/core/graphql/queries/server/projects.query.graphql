@@ -1,11 +1,15 @@
 query projects($search: String, $limit: Int) {
   projects(search: $search, limit: $limit) {
-    id,
-    name,
-    startDate,
-    technologies {
-      name,
-      version
-    }
+   ...projectBaseFields
+  }
+}
+
+fragment projectBaseFields on Project {
+  id
+  name
+  startDate
+  technologies {
+    name
+    version
   }
 }

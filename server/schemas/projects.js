@@ -1,28 +1,27 @@
 const { gql } = require('apollo-server-express');
 
-const { typeDef: Technology } = require('./technology');
 const { projects } = require('./data-set');
 
 // --- Schema ---
 
-exports.typeDefs = [gql`
-  extend type Query {
-    projects(search: String, limit: Int): [Project]
-  }
-  
+module.exports.typeDefs = gql`
   type Project { 
     id: ID
     name: String
     startDate: String
     technologies: [Technology]
   }
+
+  extend type Query {
+    projects(search: String, limit: Int): [Project]
+  }
   
- extend type Mutation {
-   createProject(name: String, startDate: String): Project,
-   deleteProject(id: ID): ID,
-   deleteAllProjects: String
- }
-`, Technology];
+  extend type Mutation {
+    createProject(name: String, startDate: String): Project,
+    deleteProject(id: ID): ID,
+    deleteAllProjects: String
+  }
+`;
 
 // --- Resolvers ---
 const createProject = (root, project) => {
@@ -49,7 +48,7 @@ const deleteAllProjects = () => {
   return '';
 };
 
-exports.projectsResolvers = {
+module.exports.projectsResolvers = {
   Query: {
     projects: (root, filters) => {
       console.log('Filters', filters);
