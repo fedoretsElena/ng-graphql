@@ -6,7 +6,7 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 
 import { IProject } from '../models';
-import { CreateProjectGQL, DeleteProjectGQL, DeleteAllProjectsGQL, ProjectsGQL, GET_FILTERS, Project } from '../core/graphql';
+import { CreateProjectGQL, DeleteProjectGQL, DeleteAllProjectsGQL, ProjectsGQL, GET_FILTERS, TOGGLE_PROJECT, Project } from '../core/graphql';
 import { IFilters } from '../models/filters.model';
 
 @Injectable({
@@ -69,6 +69,13 @@ export class ProjectsService {
         query: this.getProjectsGQL.document,
         variables: this.lastFiltersState
       }]
+    });
+  }
+
+  toggleSelectedProject(id: string): Observable<FetchResult> {
+    return this.apollo.mutate({
+      mutation: TOGGLE_PROJECT,
+      variables: { id }
     });
   }
 

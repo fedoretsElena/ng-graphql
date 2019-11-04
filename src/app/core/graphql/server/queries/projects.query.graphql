@@ -1,6 +1,7 @@
 query projects($search: String, $limit: Int) {
   projects(search: $search, limit: $limit) {
-   ...projectBaseFields
+   ...projectBaseFields,
+    selected @client
   }
 }
 

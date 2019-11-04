@@ -67,4 +67,11 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     )
     .subscribe();
   }
+
+  onToggle(id): void {
+    this.projectsService.toggleSelectedProject(id)
+      .pipe(
+        first()
+      ).subscribe();
+  }
 }

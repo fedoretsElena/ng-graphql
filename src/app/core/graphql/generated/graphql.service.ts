@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import { Injectable } from '@angular/core';
 import * as Apollo from 'apollo-angular';
-
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -13,6 +12,8 @@ export type Scalars = {
   /** The `Upload` scalar type represents a file upload. */
   Upload: any,
 };
+
+
 
 
 export enum CacheControlScope {
@@ -46,6 +47,7 @@ export type Project = {
   members?: Maybe<Array<Maybe<User>>>,
   company?: Maybe<Scalars['String']>,
   description?: Maybe<Scalars['String']>,
+  selected?: Maybe<Scalars['Boolean']>,
 };
 
 export type Query = {
@@ -108,13 +110,11 @@ export type ProjectQueryVariables = {
 };
 
 
-export type ProjectQuery = {
-  project: Maybe<(
+export type ProjectQuery = { project: Maybe<(
     Pick<Project, 'company' | 'description'>
     & { members: Maybe<Array<Maybe<Pick<User, 'fullName' | 'role'>>>> }
     & ProjectBaseFieldsFragment
-    )>
-};
+  )> };
 
 export type ProjectsQueryVariables = {
   search?: Maybe<Scalars['String']>,
@@ -122,103 +122,103 @@ export type ProjectsQueryVariables = {
 };
 
 
-export type ProjectsQuery = { projects: Maybe<Array<Maybe<ProjectBaseFieldsFragment>>> };
+export type ProjectsQuery = { projects: Maybe<Array<Maybe<(
+    Pick<Project, 'selected'>
+    & ProjectBaseFieldsFragment
+  )>>> };
 
 export type ProjectBaseFieldsFragment = (
   Pick<Project, 'id' | 'name' | 'startDate'>
   & { technologies: Maybe<Array<Maybe<Pick<Technology, 'name' | 'version'>>>> }
-  );
+);
 
 export const ProjectBaseFieldsFragmentDoc = gql`
-  fragment projectBaseFields on Project {
-    id
+    fragment projectBaseFields on Project {
+  id
+  name
+  startDate
+  technologies {
+    name
+    version
+  }
+}
+    `;
+export const CreateProjectDocument = gql`
+    mutation createProject($name: String!, $startDate: String!) {
+  createProject(name: $name, startDate: $startDate) {
     name
     startDate
-    technologies {
-      name
-      version
-    }
   }
-`;
-export const CreateProjectDocument = gql`
-  mutation createProject($name: String!, $startDate: String!) {
-    createProject(name: $name, startDate: $startDate) {
-      name
-      startDate
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: 'root'
-})
-export class CreateProjectGQL extends Apollo.Mutation<CreateProjectMutation, CreateProjectMutationVariables> {
-  document = CreateProjectDocument;
-
 }
+    `;
 
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateProjectGQL extends Apollo.Mutation<CreateProjectMutation, CreateProjectMutationVariables> {
+    document = CreateProjectDocument;
+    
+  }
 export const DeleteAllProjectsDocument = gql`
-  mutation deleteAllProjects {
-    deleteAllProjects
-  }
-`;
-
-@Injectable({
-  providedIn: 'root'
-})
-export class DeleteAllProjectsGQL extends Apollo.Mutation<DeleteAllProjectsMutation, DeleteAllProjectsMutationVariables> {
-  document = DeleteAllProjectsDocument;
-
+    mutation deleteAllProjects {
+  deleteAllProjects
 }
+    `;
 
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteAllProjectsGQL extends Apollo.Mutation<DeleteAllProjectsMutation, DeleteAllProjectsMutationVariables> {
+    document = DeleteAllProjectsDocument;
+    
+  }
 export const DeleteProjectDocument = gql`
-  mutation deleteProject($id: ID!) {
-    deleteProject(id: $id)
-  }
-`;
-
-@Injectable({
-  providedIn: 'root'
-})
-export class DeleteProjectGQL extends Apollo.Mutation<DeleteProjectMutation, DeleteProjectMutationVariables> {
-  document = DeleteProjectDocument;
-
+    mutation deleteProject($id: ID!) {
+  deleteProject(id: $id)
 }
+    `;
 
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteProjectGQL extends Apollo.Mutation<DeleteProjectMutation, DeleteProjectMutationVariables> {
+    document = DeleteProjectDocument;
+    
+  }
 export const ProjectDocument = gql`
-  query project($id: ID!) {
-    project(id: $id) {
-      ...projectBaseFields
-      company
-      members {
-        fullName
-        role
-      }
-      description
+    query project($id: ID!) {
+  project(id: $id) {
+    ...projectBaseFields
+    company
+    members {
+      fullName
+      role
     }
+    description
   }
-${ProjectBaseFieldsFragmentDoc}`;
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ProjectGQL extends Apollo.Query<ProjectQuery, ProjectQueryVariables> {
-  document = ProjectDocument;
-
 }
+    ${ProjectBaseFieldsFragmentDoc}`;
 
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ProjectGQL extends Apollo.Query<ProjectQuery, ProjectQueryVariables> {
+    document = ProjectDocument;
+    
+  }
 export const ProjectsDocument = gql`
-  query projects($search: String, $limit: Int) {
-    projects(search: $search, limit: $limit) {
-      ...projectBaseFields
-    }
+    query projects($search: String, $limit: Int) {
+  projects(search: $search, limit: $limit) {
+    ...projectBaseFields
+    selected @client
   }
-${ProjectBaseFieldsFragmentDoc}`;
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ProjectsGQL extends Apollo.Query<ProjectsQuery, ProjectsQueryVariables> {
-  document = ProjectsDocument;
-
 }
+    ${ProjectBaseFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ProjectsGQL extends Apollo.Query<ProjectsQuery, ProjectsQueryVariables> {
+    document = ProjectsDocument;
+    
+  }

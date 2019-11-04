@@ -8,7 +8,9 @@
     <div class="d-flex flex-wrap">
       <div
         class="card text-dark m-2"
+        [ngClass]="{ 'bg-light': project.selected }"
         style="width: 18rem;"
+        (click)="onToggle(project.id)"
         *ngFor="let project of projects"
       >
         <div class="card-body">

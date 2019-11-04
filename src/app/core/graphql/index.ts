@@ -1,4 +1,3 @@
-export * from './mutations';
-export * from './queries';
+export * from './local';
 
-export * from './generated/graphql.service';
+export * from './generated';

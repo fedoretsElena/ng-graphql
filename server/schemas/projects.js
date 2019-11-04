@@ -17,8 +17,8 @@ module.exports.typeDefs = gql`
   }
   
   extend type Mutation {
-    createProject(name: String, startDate: String): Project,
-    deleteProject(id: ID): ID,
+    createProject(name: String, startDate: String): Project
+    deleteProject(id: ID): ID
     deleteAllProjects: String
   }
 `;
