@@ -16,11 +16,15 @@
         <div class="card-body">
           <h5 class="card-title">{{ project.name }}</h5>
           <h6 class="card-subtitle mb-2 text-muted">Start date: {{ project.startDate }}</h6>
-          <p *ngIf="project.technologies.length"> Technologies:
+          <p *ngIf="project.technologies.length"> Technologies: <br />
             <span
               class="pl-0"
               *ngFor="let technology of project.technologies, let last = last">
                 {{ technology.name }}
+              <button
+                class="btn-sm btn-warning ml-0 px-1 py-0 mt-0 "
+                (click)="onDeleteTechnology(project.id, technology.id)"
+              >x</button>
               <ng-container *ngIf="!last">, </ng-container>
              </span>
           </p>

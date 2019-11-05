@@ -7,6 +7,7 @@ export const typeDefs = `
   type Mutation {
     toggleProject(id: ID): ID
     saveFilters(search: String, limit: Int): Filters
+    deleteTechnology($projectID: ID, $technologyID: ID): ID
   }
 
   type Query {

@@ -3,9 +3,11 @@ const projects = [{
   name: 'TNG',
   startDate: '08.12.2019',
   technologies: [{
+    id: '1',
     name: 'Angular',
     version: '8.2.0'
   }, {
+    id: '21',
     name: 'Apollo',
     version: '1.8.2'
   }],
@@ -30,9 +32,11 @@ const projects = [{
     'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
     'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
   technologies: [{
+    id: '1',
     name: 'Angular',
     version: '8.2.0'
   }, {
+    id: '2',
     name: 'NgRx',
     version: '8.0.0'
   }],

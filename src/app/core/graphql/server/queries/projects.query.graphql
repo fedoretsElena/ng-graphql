@@ -1,6 +1,6 @@
 query projects($search: String, $limit: Int) {
   projects(search: $search, limit: $limit) {
-   ...projectBaseFields,
+    ...projectBaseFields,
     selected @client
   }
 }
@@ -9,8 +9,13 @@ fragment projectBaseFields on Project {
   id
   name
   startDate
-  technologies {
-    name
-    version
-  }
+  ...technologies
 }
+
+ fragment technologies on Project {
+   technologies {
+     id,
+     name,
+     version
+   }
+ }

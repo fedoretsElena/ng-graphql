@@ -2,6 +2,22 @@ import gql from 'graphql-tag';
 
 export const resolvers = {
   Mutation: {
+    deleteTechnology: (root, { projectID, technologyID }, { cache, getCacheKey }) => {
+      const id = getCacheKey({ id: projectID, __typename: 'Project' });
+      const fragment = gql`
+        fragment Technologies on Project {
+          technologies {
+            id
+          }
+        }
+      `;
+      const data = cache.readFragment({ fragment, id });
+
+      data.technologies = data.technologies.filter(technology => technology.id !== technologyID);
+
+      cache.writeFragment({ data, fragment, id });
+      return technologyID;
+    },
     toggleProject: (root, { id }, { cache, getCacheKey }) => {
       const cacheKey = getCacheKey({ id, __typename: 'Project' });
       const fragment = gql`

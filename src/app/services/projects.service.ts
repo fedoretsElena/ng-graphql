@@ -6,7 +6,16 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 
 import { IProject } from '../models';
-import { CreateProjectGQL, DeleteProjectGQL, DeleteAllProjectsGQL, ProjectsGQL, GET_FILTERS, TOGGLE_PROJECT, Project } from '../core/graphql';
+import {
+  CreateProjectGQL,
+  DeleteProjectGQL,
+  DeleteAllProjectsGQL,
+  ProjectsGQL,
+  GET_FILTERS,
+  TOGGLE_PROJECT,
+  Project,
+  DELETE_TECHNOLOGY
+} from '../core/graphql';
 import { IFilters } from '../models/filters.model';
 
 @Injectable({
@@ -76,6 +85,13 @@ export class ProjectsService {
     return this.apollo.mutate({
       mutation: TOGGLE_PROJECT,
       variables: { id }
+    });
+  }
+
+  deleteTechnology(projectID: string, technologyID: string): Observable<FetchResult> {
+    return this.apollo.mutate({
+      mutation: DELETE_TECHNOLOGY,
+      variables: { projectID, technologyID }
     });
   }
 

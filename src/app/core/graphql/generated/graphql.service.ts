@@ -74,6 +74,7 @@ export enum RoleEnum {
 }
 
 export type Technology = {
+  id?: Maybe<Scalars['ID']>,
   name?: Maybe<Scalars['String']>,
   version?: Maybe<Scalars['String']>,
 };
@@ -129,20 +130,28 @@ export type ProjectsQuery = { projects: Maybe<Array<Maybe<(
 
 export type ProjectBaseFieldsFragment = (
   Pick<Project, 'id' | 'name' | 'startDate'>
-  & { technologies: Maybe<Array<Maybe<Pick<Technology, 'name' | 'version'>>>> }
+  & TechnologiesFragment
 );
 
-export const ProjectBaseFieldsFragmentDoc = gql`
-    fragment projectBaseFields on Project {
-  id
-  name
-  startDate
+export type TechnologiesFragment = { technologies: Maybe<Array<Maybe<Pick<Technology, 'id' | 'name' | 'version'>>>> };
+
+export const TechnologiesFragmentDoc = gql`
+    fragment technologies on Project {
   technologies {
+    id
     name
     version
   }
 }
     `;
+export const ProjectBaseFieldsFragmentDoc = gql`
+    fragment projectBaseFields on Project {
+  id
+  name
+  startDate
+  ...technologies
+}
+    ${TechnologiesFragmentDoc}`;
 export const CreateProjectDocument = gql`
     mutation createProject($name: String!, $startDate: String!) {
   createProject(name: $name, startDate: $startDate) {
