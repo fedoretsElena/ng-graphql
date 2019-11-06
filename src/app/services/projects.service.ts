@@ -5,7 +5,7 @@ import { FetchResult } from 'apollo-link';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 
-import { IProject } from '../models';
+import { IPagination, IProject } from '../models';
 import {
   CreateProjectGQL,
   DeleteProjectGQL,
@@ -13,8 +13,7 @@ import {
   ProjectsGQL,
   GET_FILTERS,
   TOGGLE_PROJECT,
-  Project,
-  DELETE_TECHNOLOGY
+  DELETE_TECHNOLOGY, ProjectsConnection
 } from '../core/graphql';
 import { IFilters } from '../models/filters.model';
 
@@ -25,27 +24,27 @@ export class ProjectsService {
 
   constructor(
     private apollo: Apollo,
-    private getProjectsGQL: ProjectsGQL,
+    private projectsGQL: ProjectsGQL,
     private createProjectGQL: CreateProjectGQL,
     private deleteProjectGQL: DeleteProjectGQL,
     private deleteAllProjectsGQL: DeleteAllProjectsGQL
   ) {
   }
 
-  getFilters(): QueryRef<ApolloQueryResult<{ filters: IFilters }>> {
+  getFilters(): QueryRef<{ filters: IFilters }> {
     return this.apollo.watchQuery({
       query: GET_FILTERS
     });
   }
 
-  watchProjects(filters?: IFilters): QueryRef<{ projects: Project[] }> {
-    return this.getProjectsGQL.watch(filters);
+  watchProjects(pagination?: IPagination): QueryRef<{ projects: ProjectsConnection }> {
+    return this.projectsGQL.watch(pagination);
   }
 
   deleteProject(id: string): Observable<FetchResult> {
     return this.deleteProjectGQL.mutate({ id }, {
       update: (store, { data: { deleteProject } }) => {
-        const query = { query: this.getProjectsGQL.document, variables: this.lastFiltersState };
+        const query = { query: this.projectsGQL.document, variables: this.lastFiltersState };
         const data: any = store.readQuery(query);
         data.projects = data.projects.filter(project => project.id !== deleteProject);
 
@@ -58,7 +57,7 @@ export class ProjectsService {
     return this.deleteAllProjectsGQL.mutate({}, {
       update: (store) => {
         const query = {
-          query: this.getProjectsGQL.document,
+          query: this.projectsGQL.document,
           variables: this.lastFiltersState
         };
         const data: any = store.readQuery(query);
@@ -75,7 +74,7 @@ export class ProjectsService {
 
     return this.createProjectGQL.mutate({ name, startDate }, {
       refetchQueries: [{ // because ID is generated on backend
-        query: this.getProjectsGQL.document,
+        query: this.projectsGQL.document,
         variables: this.lastFiltersState
       }]
     });

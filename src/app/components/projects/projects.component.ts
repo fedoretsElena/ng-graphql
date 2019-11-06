@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { filter, first, map, pluck, tap } from 'rxjs/operators';
 
-import { IProject } from '../../models';
+import { IProject, IFilters } from '../../models';
 import { ProjectsService } from '../../services';
-import { Project } from '../../core/graphql';
+import { ProjectsConnection } from '../../core/graphql';
 
 @Component({
   selector: 'app-posts',
@@ -12,36 +13,58 @@ import { Project } from '../../core/graphql';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
-  projects$: Observable<Project[]>;
+  projectsConnection$: Observable<ProjectsConnection>;
   loading = true;
 
   private sub;
+  private watchProjectsQuery: QueryRef<{ projects: ProjectsConnection }>;
+  private watchFiltersQuery: QueryRef<{ filters: IFilters }>;
 
   constructor(
-    private projectsService: ProjectsService
+    private projectsService: ProjectsService,
   ) {
   }
 
   ngOnInit() {
-    this.sub = this.projectsService.getFilters().valueChanges
+    this.watchFiltersQuery = this.projectsService.getFilters();
+    this.watchProjectsQuery = this.projectsService.watchProjects();
+
+    this.sub = this.watchFiltersQuery.valueChanges
     .pipe(
       filter(res => !!res.data),
       pluck('data'),
       pluck('filters'),
-      tap(filters => watchProjects$.setVariables(filters))
+      tap((filters: IFilters) => this.watchProjectsQuery.setVariables({first: filters.limit}))
     ).subscribe();
 
-    const watchProjects$ = this.projectsService.watchProjects();
-
-    this.projects$ = watchProjects$.valueChanges
+    this.projectsConnection$ = this.watchProjectsQuery.valueChanges
     .pipe(
-      tap(({ loading }) => this.loading = loading),
-      map(res => res.data.projects)
+      tap(({loading}) => this.loading = loading),
+      map(res => res.data.projects),
+      tap(res => console.log(res))
     );
   }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  uploadPreviousPage(cursor: string): void {
+    const filters = this.watchFiltersQuery.getLastResult().data.filters;
+
+    this.watchProjectsQuery.setVariables({
+      before: cursor,
+      last: filters.limit
+    });
+  }
+
+  uploadNextPage(cursor: string): void {
+    const filters = this.watchFiltersQuery.getLastResult().data.filters;
+
+    this.watchProjectsQuery.setVariables({
+      after: cursor,
+      first: filters.limit
+    }).then(res => console.log('done', res));
   }
 
   onAddProject(project: Partial<IProject>): void {
@@ -70,9 +93,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   onToggle(id: string): void {
     this.projectsService.toggleSelectedProject(id)
-      .pipe(
-        first()
-      ).subscribe();
+    .pipe(
+      first()
+    ).subscribe();
   }
 
   onDeleteTechnology(projectId: string, technologyId: string) {

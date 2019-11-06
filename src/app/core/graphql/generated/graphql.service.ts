@@ -39,6 +39,11 @@ export type MutationDeleteProjectArgs = {
   id?: Maybe<Scalars['ID']>
 };
 
+export type PageInfo = {
+  hasNextPage?: Maybe<Scalars['Boolean']>,
+  hasPreviousPage?: Maybe<Scalars['Boolean']>,
+};
+
 export type Project = {
   id?: Maybe<Scalars['ID']>,
   name?: Maybe<Scalars['String']>,
@@ -51,32 +56,28 @@ export type Project = {
   selected?: Maybe<Scalars['Boolean']>,
 };
 
-export type ProjectFeed = {
+export type ProjectsConnection = {
+  pageInfo: PageInfo,
+  edges?: Maybe<Array<Maybe<ProjectsEdge>>>,
+};
+
+export type ProjectsEdge = {
   cursor: Scalars['String'],
-  projects: Array<Maybe<Project>>,
-};
-
-export type Projects = {
-  projects?: Maybe<Array<Maybe<Project>>>,
-  projectFeed?: Maybe<ProjectFeed>,
-};
-
-
-export type ProjectsProjectFeedArgs = {
-  cursor?: Maybe<Scalars['String']>
+  node?: Maybe<Project>,
 };
 
 export type Query = {
   _empty?: Maybe<Scalars['String']>,
-  projectsEntity?: Maybe<Projects>,
-  projects?: Maybe<Array<Maybe<Project>>>,
+  projects?: Maybe<ProjectsConnection>,
   project?: Maybe<Project>,
 };
 
 
 export type QueryProjectsArgs = {
-  search?: Maybe<Scalars['String']>,
-  limit?: Maybe<Scalars['Int']>
+  first?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['String']>,
+  last?: Maybe<Scalars['Int']>,
+  before?: Maybe<Scalars['String']>
 };
 
 
@@ -123,16 +124,6 @@ export type DeleteProjectMutationVariables = {
 
 export type DeleteProjectMutation = Pick<Mutation, 'deleteProject'>;
 
-export type ProjectsEntityQueryVariables = {
-  cursor?: Maybe<Scalars['String']>
-};
-
-
-export type ProjectsEntityQuery = { projectsEntity: Maybe<{ projectFeed: Maybe<(
-      Pick<ProjectFeed, 'cursor'>
-      & { projects: Array<Maybe<ProjectBaseFieldsFragment>> }
-    )> }> };
-
 export type ProjectQueryVariables = {
   id: Scalars['ID']
 };
@@ -145,15 +136,23 @@ export type ProjectQuery = { project: Maybe<(
   )> };
 
 export type ProjectsQueryVariables = {
-  search?: Maybe<Scalars['String']>,
-  limit?: Maybe<Scalars['Int']>
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['String']>,
+  before?: Maybe<Scalars['String']>
 };
 
 
-export type ProjectsQuery = { projects: Maybe<Array<Maybe<(
-    Pick<Project, 'selected'>
-    & ProjectBaseFieldsFragment
-  )>>> };
+export type ProjectsQuery = { projects: Maybe<ProjectsConnectionFragment> };
+
+export type ProjectsConnectionFragment = { edges: Maybe<Array<Maybe<ProjectsEdgeFragment>>>, pageInfo: PageInfoFragment };
+
+export type PageInfoFragment = Pick<PageInfo, 'hasNextPage' | 'hasPreviousPage'>;
+
+export type ProjectsEdgeFragment = (
+  Pick<ProjectsEdge, 'cursor'>
+  & { node: Maybe<ProjectBaseFieldsFragment> }
+);
 
 export type ProjectBaseFieldsFragment = (
   Pick<Project, 'id' | 'name' | 'startDate'>
@@ -179,6 +178,31 @@ export const ProjectBaseFieldsFragmentDoc = gql`
   ...technologies
 }
     ${TechnologiesFragmentDoc}`;
+export const ProjectsEdgeFragmentDoc = gql`
+    fragment projectsEdge on ProjectsEdge {
+  cursor
+  node {
+    ...projectBaseFields
+  }
+}
+    ${ProjectBaseFieldsFragmentDoc}`;
+export const PageInfoFragmentDoc = gql`
+    fragment pageInfo on PageInfo {
+  hasNextPage
+  hasPreviousPage
+}
+    `;
+export const ProjectsConnectionFragmentDoc = gql`
+    fragment projectsConnection on ProjectsConnection {
+  edges {
+    ...projectsEdge
+  }
+  pageInfo {
+    ...pageInfo
+  }
+}
+    ${ProjectsEdgeFragmentDoc}
+${PageInfoFragmentDoc}`;
 export const CreateProjectDocument = gql`
     mutation createProject($name: String!, $startDate: String!) {
   createProject(name: $name, startDate: $startDate) {
@@ -221,26 +245,6 @@ export const DeleteProjectDocument = gql`
     document = DeleteProjectDocument;
     
   }
-export const ProjectsEntityDocument = gql`
-    query projectsEntity($cursor: String) {
-  projectsEntity {
-    projectFeed(cursor: $cursor) @connection(key: "projectFeed") {
-      cursor
-      projects {
-        ...projectBaseFields
-      }
-    }
-  }
-}
-    ${ProjectBaseFieldsFragmentDoc}`;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class ProjectsEntityGQL extends Apollo.Query<ProjectsEntityQuery, ProjectsEntityQueryVariables> {
-    document = ProjectsEntityDocument;
-    
-  }
 export const ProjectDocument = gql`
     query project($id: ID!) {
   project(id: $id) {
@@ -263,13 +267,12 @@ export const ProjectDocument = gql`
     
   }
 export const ProjectsDocument = gql`
-    query projects($search: String, $limit: Int) {
-  projects(search: $search, limit: $limit) {
-    ...projectBaseFields
-    selected @client
+    query projects($first: Int, $last: Int, $after: String, $before: String) {
+  projects(first: $first, last: $last, after: $after, before: $before) {
+    ...projectsConnection
   }
 }
-    ${ProjectBaseFieldsFragmentDoc}`;
+    ${ProjectsConnectionFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'

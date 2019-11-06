@@ -12,10 +12,6 @@ module.exports.typeDefs = gql`
     createdAt: Int
     technologies: [Technology]
   }
-
-  extend type Query {
-    projects(search: String, limit: Int): [Project]
-  }
   
   extend type Mutation {
     createProject(name: String, startDate: String): Project
@@ -51,27 +47,27 @@ const deleteAllProjects = () => {
 
 module.exports.projectsResolvers = {
   Query: {
-    projects: (root, filters) => {
-      console.log('Filters', filters);
-      let filteredProjects = [...projects];
-      if (!Object.keys(filters).length) {
-        return projects;
-      }
-
-      const { search, limit } = filters;
-
-      if (limit) {
-        filteredProjects = projects.slice(0, limit);
-      }
-
-      if (search && search.length) {
-        filteredProjects = filteredProjects.filter(project => project.name
-          .toLowerCase()
-          .includes(search.toLowerCase()));
-      }
-
-      return filteredProjects;
-    }
+    // projects: (root, filters) => {
+    //   console.log('Filters', filters);
+    //   let filteredProjects = [...projects];
+    //   if (!Object.keys(filters).length) {
+    //     return projects;
+    //   }
+    //
+    //   const { search, limit } = filters;
+    //
+    //   if (limit) {
+    //     filteredProjects = projects.slice(0, limit);
+    //   }
+    //
+    //   if (search && search.length) {
+    //     filteredProjects = filteredProjects.filter(project => project.name
+    //       .toLowerCase()
+    //       .includes(search.toLowerCase()));
+    //   }
+    //
+    //   return filteredProjects;
+    // }
   },
   Mutation: {
     createProject,

@@ -88,7 +88,7 @@ const projects = [{
   technologies: [],
   createdAt: 1572963811307
 }, {
-  id: '6',
+  id: '7',
   name: 'TEST',
   startDate: '01.03.2020',
   company: 'Epam',

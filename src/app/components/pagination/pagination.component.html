@@ -1,0 +1,17 @@
+<div class="pagination">
+  <button
+    class="page-item p-0 border-0"
+    [disabled]="!pageInfo.hasPreviousPage"
+    (click)="onPrevious()"
+  >
+    <a class="page-link">Previous</a>
+  </button>
+
+  <button
+    class="page-item p-0 border-0"
+    [disabled]="!pageInfo.hasNextPage"
+    (click)="onNext()"
+  >
+    <a class="page-link">Next</a>
+  </button>
+</div>

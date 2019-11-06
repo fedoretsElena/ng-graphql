@@ -1,7 +1,28 @@
-query projects($search: String, $limit: Int) {
-  projects(search: $search, limit: $limit) {
-    ...projectBaseFields,
-    selected @client
+query projects($first: Int, $last: Int, $after: String, $before: String) {
+  projects(first: $first, last: $last, after: $after, before: $before) {
+    ...projectsConnection
+  }
+}
+
+fragment projectsConnection on ProjectsConnection {
+  edges {
+    ...projectsEdge
+  }
+  pageInfo {
+    ...pageInfo
+  }
+}
+
+fragment pageInfo on PageInfo {
+  hasNextPage
+  hasPreviousPage
+}
+
+fragment projectsEdge on ProjectsEdge {
+  cursor
+  node {
+    ...projectBaseFields
+#    selected @client
   }
 }
 

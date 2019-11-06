@@ -1,9 +1,7 @@
-<div class="p-4">
-  <div class="custom-control custom-switch">
-    <input type="checkbox" class="custom-control-input" id="customSwitch1"
-           name="mode"
-           [(ngModel)]="mode"
-           (change)="onChange(mode)">
-    <label class="custom-control-label" for="customSwitch1">Light Theme / Dark Theme</label>
-  </div>
+<div class="custom-control custom-switch mb-3">
+  <input type="checkbox" class="custom-control-input" id="customSwitch1"
+         name="mode"
+         [(ngModel)]="mode"
+         (change)="onChange(mode)">
+  <label class="custom-control-label" for="customSwitch1">Light Theme / Dark Theme</label>
 </div>

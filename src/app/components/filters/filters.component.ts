@@ -13,7 +13,7 @@ import { SAVE_FILTERS } from '../../core/graphql';
 export class FiltersComponent implements OnInit {
   filtersForm: FormGroup = this.fb.group({
     search: '',
-    limit: 15
+    limit: 3
   });
 
   constructor(

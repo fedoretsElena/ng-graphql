@@ -4,6 +4,7 @@ import { ProjectDetailsComponent } from './project-details';
 import { ScreenModeComponent } from './screen-mode';
 import { FiltersComponent } from './filters';
 import { ProjectListComponent } from './project-list';
+import { PaginationComponent } from './pagination';
 
 export const components = [
   ProjectsComponent,
@@ -11,7 +12,8 @@ export const components = [
   ProjectDetailsComponent,
   ScreenModeComponent,
   FiltersComponent,
-  ProjectListComponent
+  ProjectListComponent,
+  PaginationComponent
 ];
 
 export * from './projects';
@@ -20,3 +22,5 @@ export * from './project-details';
 export * from './screen-mode';
 export * from './filters';
 export * from './project-list';
+export * from './pagination';
+

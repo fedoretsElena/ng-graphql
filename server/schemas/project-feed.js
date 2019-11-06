@@ -34,11 +34,11 @@ module.exports.projectFeedResolvers = {
       // integer timestamp. If no cursor is passed in,
       // set the cursor equal to the time at which the
       // last message in the channel was created.
-      console.log(projects.map(p => ({ createdAt: p.createdAt, name: p.name })));
+      // console.log(projects.map(p => ({ createdAt: p.createdAt, name: p.name })));
       let limit = 2;
 
       if (!cursor) {
-        console.log('Cursor not found!');
+        // console.log('Cursor not found!');
         cursor = projects[0].createdAt;
       }
 
@@ -50,14 +50,14 @@ module.exports.projectFeedResolvers = {
       const lastProjectIndex = projects.findIndex(
         project => project.createdAt === cursor
       ); // find index of project created at time held in cursor
-      console.log('lastProjectIndex', lastProjectIndex);
+      // console.log('lastProjectIndex', lastProjectIndex);
 
       // We need to return a new cursor to the client so that it
       // can find the next page. Let's set newCursor to the
       // createdAt time of the last message in this messageFeed:
       // limit = limit > projects.length ? projects.length : limit;
       const newCursor = projects[lastProjectIndex  + limit].createdAt;
-      console.log('newCursor', newCursor);
+      // console.log('newCursor', newCursor);
       const projectFeed = {
         projects: projects.slice(
           lastProjectIndex,
