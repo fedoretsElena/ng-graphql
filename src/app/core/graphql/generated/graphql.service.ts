@@ -43,6 +43,7 @@ export type Project = {
   id?: Maybe<Scalars['ID']>,
   name?: Maybe<Scalars['String']>,
   startDate?: Maybe<Scalars['String']>,
+  createdAt?: Maybe<Scalars['Int']>,
   technologies?: Maybe<Array<Maybe<Technology>>>,
   members?: Maybe<Array<Maybe<User>>>,
   company?: Maybe<Scalars['String']>,
@@ -50,8 +51,24 @@ export type Project = {
   selected?: Maybe<Scalars['Boolean']>,
 };
 
+export type ProjectFeed = {
+  cursor: Scalars['String'],
+  projects: Array<Maybe<Project>>,
+};
+
+export type Projects = {
+  projects?: Maybe<Array<Maybe<Project>>>,
+  projectFeed?: Maybe<ProjectFeed>,
+};
+
+
+export type ProjectsProjectFeedArgs = {
+  cursor?: Maybe<Scalars['String']>
+};
+
 export type Query = {
   _empty?: Maybe<Scalars['String']>,
+  projectsEntity?: Maybe<Projects>,
   projects?: Maybe<Array<Maybe<Project>>>,
   project?: Maybe<Project>,
 };
@@ -105,6 +122,16 @@ export type DeleteProjectMutationVariables = {
 
 
 export type DeleteProjectMutation = Pick<Mutation, 'deleteProject'>;
+
+export type ProjectsEntityQueryVariables = {
+  cursor?: Maybe<Scalars['String']>
+};
+
+
+export type ProjectsEntityQuery = { projectsEntity: Maybe<{ projectFeed: Maybe<(
+      Pick<ProjectFeed, 'cursor'>
+      & { projects: Array<Maybe<ProjectBaseFieldsFragment>> }
+    )> }> };
 
 export type ProjectQueryVariables = {
   id: Scalars['ID']
@@ -192,6 +219,26 @@ export const DeleteProjectDocument = gql`
   })
   export class DeleteProjectGQL extends Apollo.Mutation<DeleteProjectMutation, DeleteProjectMutationVariables> {
     document = DeleteProjectDocument;
+    
+  }
+export const ProjectsEntityDocument = gql`
+    query projectsEntity($cursor: String) {
+  projectsEntity {
+    projectFeed(cursor: $cursor) @connection(key: "projectFeed") {
+      cursor
+      projects {
+        ...projectBaseFields
+      }
+    }
+  }
+}
+    ${ProjectBaseFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ProjectsEntityGQL extends Apollo.Query<ProjectsEntityQuery, ProjectsEntityQueryVariables> {
+    document = ProjectsEntityDocument;
     
   }
 export const ProjectDocument = gql`

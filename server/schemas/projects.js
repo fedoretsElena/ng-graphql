@@ -9,6 +9,7 @@ module.exports.typeDefs = gql`
     id: ID
     name: String
     startDate: String
+    createdAt: Int
     technologies: [Technology]
   }
 

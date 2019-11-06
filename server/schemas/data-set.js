@@ -11,6 +11,7 @@ const projects = [{
     name: 'Apollo',
     version: '1.8.2'
   }],
+  createdAt: 1572963723132,
   company: 'Bridgewater',
   description: '\n' +
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
@@ -40,7 +41,8 @@ const projects = [{
     name: 'NgRx',
     version: '8.0.0'
   }],
-  company: 'Bridgewater'
+  company: 'Bridgewater',
+  createdAt: 1572963755627
 }, {
   id: '3',
   name: 'EQFX',
@@ -50,7 +52,8 @@ const projects = [{
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
     'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
-  technologies: []
+  technologies: [],
+  createdAt: 1572963776628
 }, {
   id: '4',
   name: 'DFHX',
@@ -60,7 +63,8 @@ const projects = [{
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
     'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
-  technologies: []
+  technologies: [],
+  createdAt: 1572963789747
 }, {
   id: '5',
   name: 'EQSZ',
@@ -70,7 +74,8 @@ const projects = [{
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
     'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
-  technologies: []
+  technologies: [],
+  createdAt: 1572963798419
 }, {
   id: '6',
   name: 'FSBA',
@@ -80,7 +85,8 @@ const projects = [{
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
     'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
-  technologies: []
+  technologies: [],
+  createdAt: 1572963811307
 }, {
   id: '6',
   name: 'TEST',
@@ -90,7 +96,8 @@ const projects = [{
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Cupiditate fuga illum inventore itaque magni minus, nulla perferendis. Amet cumque dolorum obcaecati quibusdam ' +
     'voluptate! Accusamus blanditiis, corporis possimus ratione vero vitae!',
-  technologies: []
+  technologies: [],
+  createdAt: 1572963826132
 }];
 
 exports.projects = projects;

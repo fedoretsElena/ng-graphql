@@ -1,0 +1,10 @@
+query projectsEntity($cursor: String) {
+  projectsEntity {
+    projectFeed(cursor: $cursor) @connection(key: "projectFeed") {
+      cursor
+      projects {
+        ...projectBaseFields
+      }
+    }
+  }
+}
