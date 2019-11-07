@@ -1,0 +1,7 @@
+fragment technologies on Project {
+  technologies {
+    id,
+    name,
+    version
+  }
+}

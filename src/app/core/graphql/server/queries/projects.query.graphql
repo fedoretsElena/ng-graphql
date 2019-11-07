@@ -4,39 +4,3 @@ query projects($first: Int, $last: Int, $after: String, $before: String) {
   }
 }
 
-fragment projectsConnection on ProjectsConnection {
-  edges {
-    ...projectsEdge
-  }
-  pageInfo {
-    ...pageInfo
-  }
-}
-
-fragment pageInfo on PageInfo {
-  hasNextPage
-  hasPreviousPage
-}
-
-fragment projectsEdge on ProjectsEdge {
-  cursor
-  node {
-    ...projectBaseFields
-    selected @client
-  }
-}
-
-fragment projectBaseFields on Project {
-  id
-  name
-  startDate
-  ...technologies
-}
-
- fragment technologies on Project {
-   technologies {
-     id,
-     name,
-     version
-   }
- }

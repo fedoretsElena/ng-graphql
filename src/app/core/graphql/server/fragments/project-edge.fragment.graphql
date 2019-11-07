@@ -1,0 +1,7 @@
+fragment projectsEdge on ProjectsEdge {
+  cursor
+  node {
+    ...projectBaseFields
+    selected @client
+  }
+}

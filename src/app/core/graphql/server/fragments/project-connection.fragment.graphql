@@ -1,0 +1,8 @@
+fragment projectsConnection on ProjectsConnection {
+  edges {
+    ...projectsEdge
+  }
+  pageInfo {
+    ...pageInfo
+  }
+}

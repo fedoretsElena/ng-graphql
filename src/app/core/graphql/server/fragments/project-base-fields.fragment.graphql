@@ -1,0 +1,6 @@
+fragment projectBaseFields on Project {
+  id
+  name
+  startDate
+  ...technologies
+}

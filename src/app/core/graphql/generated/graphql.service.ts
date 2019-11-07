@@ -104,6 +104,25 @@ export type User = {
   role?: Maybe<RoleEnum>,
 };
 
+export type PageInfoFragment = Pick<PageInfo, 'hasNextPage' | 'hasPreviousPage'>;
+
+export type ProjectBaseFieldsFragment = (
+  Pick<Project, 'id' | 'name' | 'startDate'>
+  & TechnologiesFragment
+);
+
+export type ProjectsConnectionFragment = { edges: Maybe<Array<Maybe<ProjectsEdgeFragment>>>, pageInfo: PageInfoFragment };
+
+export type ProjectsEdgeFragment = (
+  Pick<ProjectsEdge, 'cursor'>
+  & { node: Maybe<(
+    Pick<Project, 'selected'>
+    & ProjectBaseFieldsFragment
+  )> }
+);
+
+export type TechnologiesFragment = { technologies: Maybe<Array<Maybe<Pick<Technology, 'id' | 'name' | 'version'>>>> };
+
 export type CreateProjectMutationVariables = {
   name: Scalars['String'],
   startDate: Scalars['String']
@@ -144,25 +163,6 @@ export type ProjectsQueryVariables = {
 
 
 export type ProjectsQuery = { projects: Maybe<ProjectsConnectionFragment> };
-
-export type ProjectsConnectionFragment = { edges: Maybe<Array<Maybe<ProjectsEdgeFragment>>>, pageInfo: PageInfoFragment };
-
-export type PageInfoFragment = Pick<PageInfo, 'hasNextPage' | 'hasPreviousPage'>;
-
-export type ProjectsEdgeFragment = (
-  Pick<ProjectsEdge, 'cursor'>
-  & { node: Maybe<(
-    Pick<Project, 'selected'>
-    & ProjectBaseFieldsFragment
-  )> }
-);
-
-export type ProjectBaseFieldsFragment = (
-  Pick<Project, 'id' | 'name' | 'startDate'>
-  & TechnologiesFragment
-);
-
-export type TechnologiesFragment = { technologies: Maybe<Array<Maybe<Pick<Technology, 'id' | 'name' | 'version'>>>> };
 
 export const TechnologiesFragmentDoc = gql`
     fragment technologies on Project {
