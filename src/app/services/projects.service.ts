@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { Apollo, QueryRef } from 'apollo-angular';
 import { FetchResult } from 'apollo-link';
-import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs';
 
-import { IPagination, IProject } from '../models';
+import { IPagination, IProject, IFilters } from '../models';
 import {
   CreateProjectGQL,
   DeleteProjectGQL,
@@ -15,7 +14,6 @@ import {
   TOGGLE_PROJECT,
   DELETE_TECHNOLOGY, ProjectsConnection
 } from '../core/graphql';
-import { IFilters } from '../models/filters.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,13 +41,12 @@ export class ProjectsService {
 
   deleteProject(id: string): Observable<FetchResult> {
     return this.deleteProjectGQL.mutate({ id }, {
-      update: (store, { data: { deleteProject } }) => {
-        const query = { query: this.projectsGQL.document, variables: this.lastFiltersState };
-        const data: any = store.readQuery(query);
-        data.projects = data.projects.filter(project => project.id !== deleteProject);
-
-        store.writeQuery({ ...query, data });
-      }
+      refetchQueries: [{ // because ID is generated on backend
+        query: this.projectsGQL.document,
+        variables: {
+          first: this.lastFiltersState.limit
+        }
+      }]
     });
   }
 
@@ -58,11 +55,16 @@ export class ProjectsService {
       update: (store) => {
         const query = {
           query: this.projectsGQL.document,
-          variables: this.lastFiltersState
+          variables: { first: this.lastFiltersState.limit }
         };
         const data: any = store.readQuery(query);
-
-        data.projects = [];
+        console.log(data);
+        data.projects.edges = [];
+        data.projects.pageInfo = {
+          ...data.projects.pageInfo,
+          hasPreviousPage: false,
+          hasNextPage: false
+        };
 
         store.writeQuery({ ...query, data });
       }
@@ -75,7 +77,9 @@ export class ProjectsService {
     return this.createProjectGQL.mutate({ name, startDate }, {
       refetchQueries: [{ // because ID is generated on backend
         query: this.projectsGQL.document,
-        variables: this.lastFiltersState
+        variables: {
+          first: this.lastFiltersState.limit
+        }
       }]
     });
   }

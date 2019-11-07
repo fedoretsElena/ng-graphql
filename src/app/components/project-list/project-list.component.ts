@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { Project, ProjectsEdge } from '../../core/graphql/generated';
+import { ProjectsEdge } from '../../core/graphql/generated';
 
 @Component({
   selector: 'app-project-list',
@@ -11,35 +11,37 @@ export class ProjectListComponent implements OnInit {
   @Input()
   projects: ProjectsEdge[];
 
+  @Output()
+  delete: EventEmitter<string> = new EventEmitter<string>();
+
+  @Output()
+  deleteAll: EventEmitter<void> = new EventEmitter<void>();
+
+  @Output()
+  toggle: EventEmitter<string> = new EventEmitter<string>();
+
+  @Output()
+  deleteTechnology: EventEmitter<{ projectId: string, technologyId: string }> = new EventEmitter();
+
   constructor() {
   }
 
   ngOnInit() {
   }
 
-  fetchMore(): void {
-    // this.projectEntityQuery.fetchMore({
-      // query: ProjectsEntityDocument,
-    //   variables: {
-    //     cursor: this.cursor
-    //   },
-    //   updateQuery: ((prev, {fetchMoreResult: {projectsEntity: {projectFeed}}}) => {
-    //     const newCursor = projectFeed.cursor;
-    //     const newProjects = projectFeed.projects;
-    //
-    //     console.log(this.cursor, prev);
-    //
-    //     return {
-    //       projectsEntity: {
-    //         ...prev.projectsEntity,
-    //         projectFeed: {
-    //           ...prev.projectsEntity.projectFeed,
-    //           cursor: newCursor,
-    //           projects: [...prev.projectsEntity.projectFeed.projects, ...newProjects]
-    //         }
-    //       }
-    //     };
-    //   })
-    // });
+  onDelete(id: string): void {
+    this.delete.emit(id);
+  }
+
+  onDeleteAll(): void {
+    this.deleteAll.emit();
+  }
+
+  onToggle(id: string): void {
+    this.toggle.emit(id);
+  }
+
+  onDeleteTechnology(projectId: string, technologyId: string): void {
+    this.deleteTechnology.emit({ projectId, technologyId });
   }
 }

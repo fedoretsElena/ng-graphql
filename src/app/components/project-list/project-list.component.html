@@ -3,9 +3,10 @@
     class="card text-dark mb-3 mr-3"
     [ngClass]="{ 'bg-light': project.node.selected }"
     style="width: 18rem;"
+    (click)="onToggle(project.node.id)"
     *ngFor="let project of projects"
   >
-    <!--        (click)="onToggle(project.id)"-->
+
 
     <div class="card-body">
       <h5 class="card-title">{{ project.node.name}}, {{ project.node.id }}</h5>
@@ -15,27 +16,30 @@
           class="pl-0"
           *ngFor="let technology of project.node.technologies, let last = last">
                 {{ technology.name }}
-          <!--              <button-->
-          <!--                class="btn-sm btn-warning ml-0 px-1 py-0 mt-0 "-->
-          <!--                (click)="onDeleteTechnology(project.id, technology.id)"-->
-          <!--              >x</button>-->
-              <ng-container *ngIf="!last">, </ng-container>
-             </span>
+            <button
+              class="btn-sm btn-warning ml-0 px-1 py-0 mt-0 "
+              (click)="onDeleteTechnology(project.node.id, technology.id)"
+            >x</button>
+          <ng-container *ngIf="!last">, </ng-container>
+         </span>
       </p>
     </div>
 
     <div class="card-footer">
       <a [routerLink]="[project.node.id]" class="card-link">See more</a>
-      <!--          <button class="btn btn-primary btn-sm px-2 my-0 float-right" (click)="onDelete(project.id)">Delete</button>-->
+      <button
+        class="btn btn-primary btn-sm px-2 my-0 float-right"
+        (click)="onDelete(project.node.id)">Delete
+      </button>
     </div>
   </div>
 </div>
 
 <div class="d-flex align-items-center mt-2">
-  <!--      <button-->
-  <!--        class="btn btn-primary btn-sm mt-0"-->
-  <!--        *ngIf="projects && projects.length"-->
-  <!--        (click)="onDeleteAll()">Delete all-->
-  <!--      </button>-->
+  <button
+    class="btn btn-primary btn-sm mt-0"
+    *ngIf="projects && projects.length"
+    (click)="onDeleteAll()">Delete all
+  </button>
 </div>
 

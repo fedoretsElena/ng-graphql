@@ -151,7 +151,10 @@ export type PageInfoFragment = Pick<PageInfo, 'hasNextPage' | 'hasPreviousPage'>
 
 export type ProjectsEdgeFragment = (
   Pick<ProjectsEdge, 'cursor'>
-  & { node: Maybe<ProjectBaseFieldsFragment> }
+  & { node: Maybe<(
+    Pick<Project, 'selected'>
+    & ProjectBaseFieldsFragment
+  )> }
 );
 
 export type ProjectBaseFieldsFragment = (
@@ -183,6 +186,7 @@ export const ProjectsEdgeFragmentDoc = gql`
   cursor
   node {
     ...projectBaseFields
+    selected @client
   }
 }
     ${ProjectBaseFieldsFragmentDoc}`;

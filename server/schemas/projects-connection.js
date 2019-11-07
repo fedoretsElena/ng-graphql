@@ -33,7 +33,6 @@ module.exports.typeDefs = gql`
 module.exports.projectsConnectionResolver = {
   Query: {
     projects: (root, { first, after, last, before }) => {
-      console.log(first, after, last, before );
       let initialEdges = projects.map(project => ({
         cursor: project.createdAt,
         node: {

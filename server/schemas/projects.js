@@ -23,8 +23,8 @@ module.exports.typeDefs = gql`
 // --- Resolvers ---
 const createProject = (root, project) => {
   const id = (+new Date()).toString();
-  const newProject = { ...project, id, technologies: []};
-  projects.push(newProject);
+  const newProject = { ...project, id, technologies: [], createdAt: +new Date()};
+  projects.unshift(newProject);
 
   return newProject;
 };

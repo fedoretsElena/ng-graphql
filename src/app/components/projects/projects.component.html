@@ -3,20 +3,19 @@
   <app-filters></app-filters>
 
   <ng-container *ngIf="projectsConnection$ | async as projectsConnection">
-    <app-project-list [projects]="projectsConnection.edges"></app-project-list>
+    <app-project-list
+      class="d-block mb-3"
+      [projects]="projectsConnection.edges"
+      (delete)="onDelete($event)"
+      (deleteAll)="onDeleteAll()"
+      (toggle)="onToggle($event)"
+      (deleteTechnology)="onDeleteTechnology($event)"
+    ></app-project-list>
     <app-pagination
       [pageInfo]="projectsConnection.pageInfo"
       (previous)="uploadPreviousPage(projectsConnection.edges[0].cursor)"
       (next)="uploadNextPage(projectsConnection.edges[projectsConnection.edges.length - 1].cursor)"
     ></app-pagination>
-
-    <!--    <div class="d-flex align-items-center mt-2">-->
-    <!--      <button-->
-    <!--        class="btn btn-primary btn-sm mt-0"-->
-    <!--        *ngIf="projects && projects.length"-->
-    <!--        (click)="onDeleteAll()">Delete all-->
-    <!--      </button>-->
-    <!--    </div>-->
   </ng-container>
 
   <section class="mt-5 py-2 border-1 border-primary">

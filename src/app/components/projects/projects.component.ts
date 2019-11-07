@@ -3,9 +3,9 @@ import { QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { filter, first, map, pluck, tap } from 'rxjs/operators';
 
-import { IProject, IFilters } from '../../models';
+import { IProject, IFilters, IPagination } from '../../models';
 import { ProjectsService } from '../../services';
-import { ProjectsConnection } from '../../core/graphql';
+import { ProjectsConnection, ProjectsDocument } from '../../core/graphql';
 
 @Component({
   selector: 'app-posts',
@@ -52,19 +52,25 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   uploadPreviousPage(cursor: string): void {
     const filters = this.watchFiltersQuery.getLastResult().data.filters;
 
-    this.watchProjectsQuery.setVariables({
-      before: cursor,
-      last: filters.limit
-    });
+    this.fetchMore({ before: cursor, last: filters.limit });
   }
 
   uploadNextPage(cursor: string): void {
     const filters = this.watchFiltersQuery.getLastResult().data.filters;
 
-    this.watchProjectsQuery.setVariables({
-      after: cursor,
-      first: filters.limit
-    }).then(res => console.log('done', res));
+    this.fetchMore({ after: cursor, first: filters.limit });
+  }
+
+  private fetchMore(variables: Pick<IPagination, 'after' | 'before' | 'first' | 'last'>): void {
+    this.watchProjectsQuery.fetchMore({
+      query: ProjectsDocument,
+      variables,
+      updateQuery: ((prev, { fetchMoreResult: { projects } }) => {
+        return {
+          projects
+        };
+      })
+    });
   }
 
   onAddProject(project: Partial<IProject>): void {
@@ -75,7 +81,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     .subscribe();
   }
 
-  onDelete(id: string): void {
+  onDelete(id: string):
+    void {
     this.projectsService.deleteProject(id)
     .pipe(
       first()
@@ -98,8 +105,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  onDeleteTechnology(projectId: string, technologyId: string) {
-    this.projectsService.deleteTechnology(projectId, technologyId)
+  onDeleteTechnology(ids: { projectId: string, technologyId: string }) {
+    this.projectsService.deleteTechnology(ids.projectId, ids.technologyId)
     .pipe(
       first()
     ).subscribe();
